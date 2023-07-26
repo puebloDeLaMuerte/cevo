@@ -20,8 +20,8 @@ public class GmInteger extends GeneMethod{
                 geneReader.getNexByte(),
                 geneReader.getNexByte()
         };
-        System.out.println("buildInt: " + byteArray);
         int num = ByteBuffer.wrap(byteArray).getInt();
+        //System.out.print("buildInt: " + num);
         return num;
     }
 }
