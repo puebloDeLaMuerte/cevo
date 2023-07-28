@@ -8,7 +8,7 @@ public class CreatureLayer extends MapLayer{
 
 	public void addNewRandomCreature() {
 
-		byte[] bytes = new byte[(int)map.main.random(1,20000)];
+		byte[] bytes = new byte[(int)map.main.random(1,80000)];
 		for( int g = 0; g < bytes.length; g++ ) {
 			bytes[g] = (byte)map.main.random(0,255);
 		}

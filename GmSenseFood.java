@@ -15,9 +15,7 @@ public class GmSenseFood extends  GeneMethod{
 		int y = geneReader.getNexInt();
 
 		int i = (int)geneReader.map.getFoodAt(x + geneReader.creature.positionX, y + geneReader.creature.positionY);
-		if( i > 0 ) {
-			System.out.println("food seen: " + i);
-		}
+
 		return i;
 	}
 }

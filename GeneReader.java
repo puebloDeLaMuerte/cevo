@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class GeneReader {
 
-	public int verbose = 4;
+	public int verbose = 6;
 
 	Main main;
 	Map map;
@@ -33,11 +33,22 @@ public class GeneReader {
 	};
 
 
-	public void executeGenome(Creature creature) {
+	public void reset() {
 		this.depth = 0;
 		this.maxDepth = 0;
 		this.totalSkips = 0;
+		//this.creature = creature;
+
+		for( GeneMethod gm : geneMethods ) {
+			gm.reset();
+		}
+	}
+
+
+	public void executeGenome(Creature creature) {
 		this.creature = creature;
+		reset();
+
 
 		// take a timestamp in milliseconds
 		long startTime = System.currentTimeMillis();
@@ -60,9 +71,13 @@ public class GeneReader {
 		double timeDiff = (endTime - startTime) / 1000.0;
 
 		if( verbose > 5 ) {
+			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 			System.out.println("max depth: " + maxDepth);
 			System.out.println("total skips: " + totalSkips);
 			System.out.println("time to execute (s): " + timeDiff);
+			for(GeneMethod gm : geneMethods) {
+				gm.printStats();
+			}
 		}
 
 		this.depth = 0;
@@ -119,7 +134,7 @@ public class GeneReader {
 		if(verbose > 10) System.out.print(gm.getName() + "(");
 
 		int r = gm.execute(this);
-
+		gm.incrementCount();
 		if(verbose > 10) System.out.print(") ");
 		if(verbose > 10) System.out.print(" --> " + r );
 		if(verbose > 10) System.out.print(" (skips: " + skips + ")");

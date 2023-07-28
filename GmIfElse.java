@@ -16,6 +16,7 @@ public class GmIfElse extends GeneMethod{
 	public int execute(GeneReader geneReader) throws Exception {
 
 		int mod = geneReader.getNexByte() % 6;
+		if( mod < 0 ) mod += 6;
 
 		int c1 = geneReader.getNexInt();
 		int c2 = geneReader.getNexInt();
