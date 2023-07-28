@@ -53,5 +53,7 @@ public class Main extends PApplet {
 
 		map.Tick();
 		map.drawMap(this.g);
+
+		gr.printTotalStatistics();
 	}
 }

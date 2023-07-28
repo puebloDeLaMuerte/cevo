@@ -50,15 +50,15 @@ public class MapLayer {
 		entities[x][y] = entity;
 		entityList.add(entity);
 		entity.setPosition(x, y);
-		entity.setMapLayer(this);
+		entity.setMap( map, this);
 		return true;
 	}
 
 	// move an entity to a new location (wrapping around map coordinates), return the resulting movement cost ()
 	public float moveEntity( MapEntity e, int x, int y ) {
 
-		float cost = x * map.movementCost;
-		cost += y * map.movementCost;
+		float cost = x * Settings.movementCost;
+		cost += y * Settings.movementCost;
 		if( cost < 0 ) cost *= -1;
 
 		// wrap around map coordinates
@@ -67,7 +67,7 @@ public class MapLayer {
 
 		// if the new location is occupied, add the occupied cost factor
 		if( entities[newX][newY] != null && entities[newX][newY] != e) {
-			cost *= map.occupiedCostFactor;
+			cost *= Settings.movementOccupiedCostFactor;
 			return cost;
 		}
 		else {

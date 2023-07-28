@@ -4,10 +4,12 @@ public abstract class MapEntity {
 	protected int positionY;
 	//protected Map map;
 	protected MapLayer mapLayer;
+	protected Map map;
 
 	public abstract void Tick();
 
-	public void setMapLayer( MapLayer layer ) {
+	public void setMap( Map map, MapLayer layer ) {
+		this.map = map;
 		this.mapLayer = layer;
 	}
 

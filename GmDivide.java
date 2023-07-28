@@ -6,6 +6,10 @@ public class GmDivide extends GeneMethod{
 	}
 
 	@Override
+	public void printTotalStats() {
+	}
+
+	@Override
 	int getArity() {
 		return 2;
 	}

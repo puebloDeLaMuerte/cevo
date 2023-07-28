@@ -9,9 +9,11 @@ public abstract class GeneMethod {
 		useageCounter++;
 	}
 
-	public void printStats() {
+	public void printExecutionStats() {
 		System.out.println(getName() + ": " + useageCounter);
 	}
+
+	public abstract void printTotalStats();
 
 	abstract String getName();
 	abstract int getArity();

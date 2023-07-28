@@ -11,7 +11,7 @@ public class FoodItem extends MapEntity {
 	public void Tick() {
 		if( energy < maxEnergy ) {
 			// grow
-			if( Math.random() < 0.3 ) {
+			if( Math.random() < Settings.foodReproductionThreshold ) {
 				energy++;
 			}
 		}

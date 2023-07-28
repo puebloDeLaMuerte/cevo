@@ -18,12 +18,16 @@ public class Creature extends MapEntity{
 		this.id = (int)(Math.random()*1000000);
 	}
 
+	public void Tick() {
+		fitness -= 0.1f;
+		gr.executeGenome(this);
+		checkFitness();
+	}
 
 	public float moveCreature(float x, float y) {
 
 		moveBufferX += x;
 		moveBufferY += y;
-
 
 		int mx = 0;
 		int my = 0;
@@ -43,6 +47,13 @@ public class Creature extends MapEntity{
 		return cost;
 	}
 
+
+	public float eat() {
+		float energy = map.eatAt(positionX,positionY);
+		fitness += energy;
+		return energy - Settings.eatCost;
+	}
+
 	public void spendFitness(float cost) {
 		fitness -= cost;
 	}
@@ -54,11 +65,6 @@ public class Creature extends MapEntity{
 		}
 	}
 
-	public void Tick() {
-		fitness -= 0.1f;
-		gr.executeGenome(this);
-		checkFitness();
-	}
 
 	@Override
 	public float getDrawingValue() {

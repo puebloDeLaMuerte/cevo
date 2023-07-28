@@ -1,10 +1,8 @@
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
 
 public class GeneReader {
 
-	public int verbose = 6;
+	public int verbose = Settings.geneReaderVerbosity;
 
 	Main main;
 	Map map;
@@ -29,7 +27,8 @@ public class GeneReader {
 		new GmIfElse(),
 		new GmMove(),
 		new GmDivide(),
-		new GmSenseFood()
+		new GmSenseFood(),
+		new GmEat()
 	};
 
 
@@ -76,7 +75,7 @@ public class GeneReader {
 			System.out.println("total skips: " + totalSkips);
 			System.out.println("time to execute (s): " + timeDiff);
 			for(GeneMethod gm : geneMethods) {
-				gm.printStats();
+				gm.printExecutionStats();
 			}
 		}
 
@@ -142,7 +141,11 @@ public class GeneReader {
 		return r;
 	}
 
-
+	public void printTotalStatistics() {
+		for(GeneMethod gm : geneMethods) {
+			gm.printTotalStats();
+		}
+	}
 
 
 }

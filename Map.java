@@ -6,8 +6,7 @@ public class Map {
 	int width;
 	int height;
 
-	float movementCost = 1.0f;
-	float occupiedCostFactor = 2.0f;
+
 
 	Main main;
 	MapLayer foodLayer;
@@ -59,6 +58,20 @@ public class Map {
 
 	public int getHeight() {
 		return height;
+	}
+
+	public float eatAt(int posX, int posY) {
+
+		posX = wrapX(posX);
+		posY = wrapY(posY);
+
+		float energy = 0;
+		if(foodLayer.entities[posX][posY] != null) {
+			FoodItem food = (FoodItem)foodLayer.entities[posX][posY];
+			energy = food.getEnergy();
+			foodLayer.removeEntity(food);
+		}
+		return energy;
 	}
 
 	public float getFoodAt(int x, int y) {
