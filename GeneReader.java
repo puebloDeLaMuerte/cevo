@@ -4,8 +4,20 @@ import java.util.HashMap;
 
 public class GeneReader {
 
-	Genome genome;
+	public int verbose = 4;
+
+	Main main;
+	Map map;
+	Creature creature;
 	int depth = 0;
+	int maxDepth = 0;
+	int totalSkips = 0;
+
+	public GeneReader(Main m, Map map) {
+		this.map = map;
+		this.main = m;
+	}
+
 	ArrayList<String> callstack = new ArrayList<String>();
 
 	// make a dictionary of all the geneMethods (as values) referenced by a byte as a key
@@ -13,74 +25,104 @@ public class GeneReader {
 
 		new GmAdd(),
 		new GmSubtract(),
-		new GmInteger()
+		new GmInteger(),
+		new GmIfElse(),
+		new GmMove(),
+		new GmDivide(),
+		new GmSenseFood()
 	};
 
 
-	public void executeGenome(Genome genome) {
+	public void executeGenome(Creature creature) {
 		this.depth = 0;
-		this.genome = genome;
+		this.maxDepth = 0;
+		this.totalSkips = 0;
+		this.creature = creature;
+
+		// take a timestamp in milliseconds
+		long startTime = System.currentTimeMillis();
+
 		try {
-			while( genome.hasNext() ) {
+			//while( genome.hasNext() ) {
+				creature.genome.reset();
 				int result = getNexInt();
-				System.out.println();
-				System.out.println("END RESULT: " + result);
-			}
+				if(verbose > 10) System.out.println();
+				if(verbose > 10) System.out.println("END RESULT: " + result);
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// take a timestamp in milliseconds
+		long endTime = System.currentTimeMillis();
+
+		// calculate the time difference and print it
+		double timeDiff = (endTime - startTime) / 1000.0;
+
+		if( verbose > 5 ) {
+			System.out.println("max depth: " + maxDepth);
+			System.out.println("total skips: " + totalSkips);
+			System.out.println("time to execute (s): " + timeDiff);
+		}
+
 		this.depth = 0;
-		this.genome = null;
+		this.maxDepth = 0;
+		this.totalSkips = 0;
+		this.creature = null;
 	}
 
 	// get the next byte from the genome as a raw byte
 	public byte getNexByte() {
-		if( !genome.hasNext() ) {
-			System.out.println("X");
+		if( !creature.genome.hasNext() ) {
+			if(verbose > 10) System.out.println("X");
 			return 0x0;
 		}
-		return genome.next();
+		return creature.genome.next();
 	}
 
 	// get the next byte from the genome and interpret it as a geneMethod
 	public int getNexInt() throws Exception {
 		depth++;
+		this.maxDepth++;
 		int skips = 0;
 
-		System.out.println();
+		if(verbose > 10) System.out.println();
 		for( int i = 0; i < depth; i++ ) {
-			System.out.print(".");
+			if(verbose > 10) System.out.print(".");
 		}
 
-		if( !genome.hasNext() ) {
+		if( !creature.genome.hasNext() ) {
 			depth--;
-			System.out.print("eog ");
-			//System.out.println(" --> " + 0 );
+			if(verbose > 10) System.out.print("eog ");
+			//if(verbose) System.out.println(" --> " + 0 );
 			return 0;
 		}
 
-		byte b = genome.next();
+		byte b = creature.genome.next();
 
 		while( b < 0 || b >= geneMethods.length ) {
-			if( !genome.hasNext() ) {
+			if( !creature.genome.hasNext() ) {
 
-				System.out.print("eog ");
-				//System.out.println(" --> " + 0 );
+				if(verbose > 10) System.out.print("eog ");
+				//if(verbose) System.out.println(" --> " + 0 );
 				depth--;
 				return 0;
 			}
-			b = genome.next();
+			b = creature.genome.next();
 			skips++;
-			//System.out.print(".");
+			//if(verbose) System.out.print(".");
 		}
-		//System.out.println("x");
+		totalSkips += skips;
+		//if(verbose) System.out.println("x");
 
 		GeneMethod gm = geneMethods[b];
-		System.out.print(gm.getName() + "(");
+		if(verbose > 10) System.out.print(gm.getName() + "(");
+
 		int r = gm.execute(this);
-		System.out.print(") ");
-		System.out.print(" --> " + r );
-		System.out.print(" (skips: " + skips + ")");
+
+		if(verbose > 10) System.out.print(") ");
+		if(verbose > 10) System.out.print(" --> " + r );
+		if(verbose > 10) System.out.print(" (skips: " + skips + ")");
 		depth--;
 		return r;
 	}

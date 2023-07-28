@@ -3,55 +3,55 @@ import processing.core.PApplet;
 public class Main extends PApplet {
 
 	public static void main(String[] args) {
+		System.out.println("args.length: " + args.length);
+		/// print all args
+		for( int i = 0; i < args.length; i++ ) {
+			System.out.println("arg[" + i + "]: " + args[i]);
+		}
 		PApplet.main("Main");
 	}
 
-	GeneReader gr = new GeneReader();
+
+	Map map;
+	GeneReader gr;
 
 	public void settings() {
 
-		size(200, 200);
+		size(1000, 1000);
+
+		map = new Map( this, 400,400 );
+		gr = new GeneReader(this, map);
+
+		// init food items
+		for( int i = 0; i < 200; i++) {
+			map.foodLayer.addEntity(new FoodItem((int)(random(1)*256)));
+		}
+
+
+		// init creatures
+		for( int i = 0; i < 40; i++) {
+			map.creatureLayer.addNewRandomCreature();
+			/*
+			byte[] bytes = new byte[(int)random(1,20000)];
+			for( int g = 0; g < bytes.length; g++ ) {
+				bytes[g] = (byte)random(0,255);
+			}
+			Genome g = new Genome(bytes);
+
+			map.creatureLayer.addEntity( new Creature(g,gr,5000) );
+			*/
+		}
 	}
 
 	public void setup() {
 		// noLoop();
+		surface.setTitle("cevo");
+		//surface.setResizable(true);
 	}
 
 	public void draw() {
 
-		if( frameCount % 2 == 0) {
-			background(255);
-			stroke(0);
-		}
-		else {
-			background(0);
-			stroke(255);
-		}
-		line(0, 0, width, height);
-		line(0, height, width, 0);
-
-		println("");
-		println("");
-		println("+----------------------+");
-		println("     new genome: ");
-		println("+----------------------+");
-		println("");
-
-		// make a byte[] with a random length between 1 and 1000, and fill it with random bytes
-		byte[] bytes = new byte[(int)random(1,10000)];
-		for( int i = 0; i < bytes.length; i++ ) {
-			bytes[i] = (byte)random(0,255);
-		}
-
-		Genome g = new Genome(bytes);
-
-		gr.executeGenome(g);
-
-		// delay execution by 1 second
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		map.Tick();
+		map.drawMap(this.g);
 	}
 }
