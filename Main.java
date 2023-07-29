@@ -29,7 +29,7 @@ public class Main extends PApplet {
 
 
 		// init creatures
-		for( int i = 0; i < 1; i++) {
+		for( int i = 0; i < 100; i++) {
 			map.creatureLayer.addNewRandomCreature();
 		}
 	}
@@ -52,7 +52,7 @@ public class Main extends PApplet {
 	public void keyPressed() {
 		if( key == 'c' ) {
 			Creature c = (Creature)map.creatureLayer.entityList.get(0);
-			byte[] subgenome = gr.getRandomSubString(c.genome);
+			gr.getRandomSubString(c.genome);
 		}
 	}
 }

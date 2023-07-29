@@ -32,4 +32,8 @@ public class Genome {
 	public boolean hasNext() {
 		return genePointer < genes.length;
 	}
+
+	public byte[] getGenes() {
+		return genes;
+	}
 }

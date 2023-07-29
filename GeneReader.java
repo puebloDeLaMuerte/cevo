@@ -145,15 +145,32 @@ public class GeneReader {
 		return r;
 	}
 
-	public byte[] getRandomSubString(Genome g) {
+	public SplitGenesContainer getRandomSubString(Genome g) {
+
+		SplitGenesContainer container = new SplitGenesContainer();
+		container.original = g.getGenes();
+
+		ArrayList<Byte> preBytes = new ArrayList<Byte>();
 
 		// skip to random position in genome
 
 		int r = (int)(Math.random()*g.length());
 		byte gene = 0x0;
+		g.reset();
 		for( int i = 0; i < r; i++ ) {
-			gene = g.next();
+			if(g.hasNext()) {
+				gene = g.next();
+				preBytes.add(gene);
+			}
+			else {
+				return null;
+			}
 		}
+
+		// start copying
+
+		ArrayList<Byte> splitBytes = new ArrayList<Byte>();
+		//splitBytes.add(gene);
 
 		// find the next valid gene
 
@@ -162,18 +179,17 @@ public class GeneReader {
 			m = resolveGeneMethod(gene);
 			if( m == null ) {
 				gene = g.next();
+				splitBytes.add(gene);
 			}
 		}
 
 		int arity = m.getArity();
 		int byteArity = m.getByteArity();
 
-		ArrayList<Byte> bytes = new ArrayList<Byte>();
-		bytes.add(gene);
 
 		while( (arity > 0 || byteArity > 0) && g.hasNext() ) {
 			gene = g.next();
-			bytes.add(gene);
+			splitBytes.add(gene);
 
 			if ( byteArity > 0 ) {
 				byteArity--;
@@ -188,15 +204,22 @@ public class GeneReader {
 			}
 		}
 
-
-		// turn bytes into byte array
-		byte[] byteArray = new byte[bytes.size()];
-		for (int i = 0; i < bytes.size(); i++) {
-			byteArray[i] = bytes.get(i);
+		// copy remaining bytes to postBytes
+		ArrayList<Byte> postBytes = new ArrayList<Byte>();
+		while( g.hasNext() ) {
+			postBytes.add(g.next());
 		}
 
-		return byteArray;
+		container.pre = container.toByteArray(preBytes);;
+		container.split = container.toByteArray(splitBytes);
+		container.post = container.toByteArray(postBytes);
+
+		container.printCompare();
+
+		return container;
 	}
+
+
 
 	public GeneMethod resolveGeneMethod(byte b) {
 		if( b < geneMethods.length && b >= 0 ) {
@@ -211,5 +234,58 @@ public class GeneReader {
 		}
 	}
 
+}
 
+
+class SplitGenesContainer {
+
+	public byte[] toByteArray( ArrayList<Byte> bytes ) {
+		// turn bytes into byte array
+		byte[] byteArray = new byte[bytes.size()];
+		for (int i = 0; i < bytes.size(); i++) {
+			byteArray[i] = bytes.get(i);
+		}
+		return byteArray;
+	}
+
+	public void printCompare() {
+
+		int offset = pre.length;
+
+		for(int i = 0; i < original.length; i++) {
+
+			System.out.print( String.format("%010d",i) + ":		" );
+
+
+
+			System.out.print( String.format("%+04d", original[i]) + "	" );
+
+			if( i < pre.length ) {
+				System.out.print( String.format("%+04d", pre[i]) );
+			}
+			else {
+				System.out.print( "		" );
+			}
+
+			if( i >= offset && i < offset + split.length ) {
+
+				System.out.print( String.format("%+04d", split[ i - offset ]) );
+			}
+			else {
+				System.out.print( "		" );
+			}
+
+			if( i >= offset + split.length ) {
+				System.out.print( "    " );
+				System.out.print( String.format("%+04d", post[ i - offset - split.length ]) );
+			}
+
+			System.out.println();
+		}
+	}
+
+	public byte[] original;
+	public byte[] pre;
+	public byte[] split;
+	public byte[] post;
 }
