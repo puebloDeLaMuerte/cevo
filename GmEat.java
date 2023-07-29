@@ -9,9 +9,12 @@ public class GmEat extends GeneMethod
 	}
 
 	@Override
+	int getByteArity() { return 0 ; }
+	@Override
 	int getArity() {
 		return 0;
 	}
+
 
 	@Override
 	public void printTotalStats() {

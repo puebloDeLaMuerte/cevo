@@ -10,8 +10,10 @@ public class GmIfElse extends GeneMethod{
 	}
 
 	@Override
+	int getByteArity() { return 1 ; }
+	@Override
 	int getArity() {
-		return 5;
+		return 4;
 	}
 
 	/// 1 byte from the geneReader. Take the modulo 6 of that byte. If it's 0, use > if it's 1, use <, if it's 2 use >=, if it's 3 use <=, if it's 4, use == if it's 5,  use !=

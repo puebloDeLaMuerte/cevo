@@ -17,6 +17,7 @@ public abstract class GeneMethod {
 
 	abstract String getName();
 	abstract int getArity();
+	abstract int getByteArity();
 
 	public abstract int execute(GeneReader geneReader) throws Exception;
 

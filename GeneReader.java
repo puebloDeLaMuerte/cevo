@@ -28,7 +28,11 @@ public class GeneReader {
 		new GmMove(),
 		new GmDivide(),
 		new GmSenseFood(),
-		new GmEat()
+		new GmEat(),
+		new GmFitness(),
+		new GmTime(),
+		new GmStore(),
+		new GmLoad(),
 	};
 
 
@@ -139,6 +143,66 @@ public class GeneReader {
 		if(verbose > 10) System.out.print(" (skips: " + skips + ")");
 		depth--;
 		return r;
+	}
+
+	public byte[] getRandomSubString(Genome g) {
+
+		// skip to random position in genome
+
+		int r = (int)(Math.random()*g.length());
+		byte gene = 0x0;
+		for( int i = 0; i < r; i++ ) {
+			gene = g.next();
+		}
+
+		// find the next valid gene
+
+		GeneMethod m = null;
+		while( m == null && g.hasNext() ) {
+			m = resolveGeneMethod(gene);
+			if( m == null ) {
+				gene = g.next();
+			}
+		}
+
+		int arity = m.getArity();
+		int byteArity = m.getByteArity();
+
+		ArrayList<Byte> bytes = new ArrayList<Byte>();
+		bytes.add(gene);
+
+		while( (arity > 0 || byteArity > 0) && g.hasNext() ) {
+			gene = g.next();
+			bytes.add(gene);
+
+			if ( byteArity > 0 ) {
+				byteArity--;
+			}
+			else {
+				m = resolveGeneMethod(gene);
+				if( m != null ) {
+					arity--;
+					arity += m.getArity();
+					byteArity += m.getByteArity();
+				}
+			}
+		}
+
+
+		// turn bytes into byte array
+		byte[] byteArray = new byte[bytes.size()];
+		for (int i = 0; i < bytes.size(); i++) {
+			byteArray[i] = bytes.get(i);
+		}
+
+		return byteArray;
+	}
+
+	public GeneMethod resolveGeneMethod(byte b) {
+		if( b < geneMethods.length && b >= 0 ) {
+			return geneMethods[b];
+		}
+		return null;
 	}
 
 	public void printTotalStatistics() {

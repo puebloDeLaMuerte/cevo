@@ -14,7 +14,7 @@ public class CreatureLayer extends MapLayer{
 		}
 		Genome g = new Genome(bytes);
 
-		Creature c = new Creature(g, map.main.gr, 2000);
+		Creature c = new Creature(g, map.main.gr, 2000, map.getTime() );
 		addEntity(c);
 	}
 

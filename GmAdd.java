@@ -9,6 +9,8 @@ public class GmAdd extends GeneMethod{
 	}
 
 	@Override
+	int getByteArity() { return 0 ; }
+	@Override
 	int getArity() {
 		return 2;
 	}

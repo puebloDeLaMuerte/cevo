@@ -25,6 +25,10 @@ public class Genome {
 		return b;
 	}
 
+	public int length() {
+		return genes.length;
+	}
+
 	public boolean hasNext() {
 		return genePointer < genes.length;
 	}

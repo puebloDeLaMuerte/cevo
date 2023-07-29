@@ -23,25 +23,17 @@ public class Main extends PApplet {
 		gr = new GeneReader(this, map);
 
 		// init food items
-		for( int i = 0; i < 200; i++) {
+		for( int i = 0; i < 800; i++) {
 			map.foodLayer.addEntity(new FoodItem((int)(random(1)*256)));
 		}
 
 
 		// init creatures
-		for( int i = 0; i < 40; i++) {
+		for( int i = 0; i < 1; i++) {
 			map.creatureLayer.addNewRandomCreature();
-			/*
-			byte[] bytes = new byte[(int)random(1,20000)];
-			for( int g = 0; g < bytes.length; g++ ) {
-				bytes[g] = (byte)random(0,255);
-			}
-			Genome g = new Genome(bytes);
-
-			map.creatureLayer.addEntity( new Creature(g,gr,5000) );
-			*/
 		}
 	}
+
 
 	public void setup() {
 		// noLoop();
@@ -54,6 +46,13 @@ public class Main extends PApplet {
 		map.Tick();
 		map.drawMap(this.g);
 
-		gr.printTotalStatistics();
+		//gr.printTotalStatistics();
+	}
+
+	public void keyPressed() {
+		if( key == 'c' ) {
+			Creature c = (Creature)map.creatureLayer.entityList.get(0);
+			byte[] subgenome = gr.getRandomSubString(c.genome);
+		}
 	}
 }

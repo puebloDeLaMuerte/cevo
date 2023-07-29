@@ -8,7 +8,7 @@ public class MapLayer {
 	int layerDrawingHue = 0;
 	int getLayerDrawingSaturation = 0;
 
-	Map map;
+	protected Map map;
 
 	MapEntity[][] entities;
 	ArrayList<MapEntity> entityList = new ArrayList<MapEntity>();

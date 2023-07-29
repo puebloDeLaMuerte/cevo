@@ -6,7 +6,7 @@ public class Map {
 	int width;
 	int height;
 
-
+	int time = 0;
 
 	Main main;
 	MapLayer foodLayer;
@@ -17,11 +17,12 @@ public class Map {
 		this.width = w;
 		this.height = h;
 
-		foodLayer = new MapLayer(this, 110,70);
+		foodLayer = new MapLayer(this, 110,30);
 		creatureLayer = new CreatureLayer(this, 350, 100);
 	}
 
 	public void Tick() {
+		time++;
 		foodLayer.Tick();
 		creatureLayer.Tick();
 	}
@@ -103,5 +104,9 @@ public class Map {
 			newY += height;
 		}
 		return newY;
+	}
+
+	public int getTime() {
+		return time;
 	}
 }

@@ -11,8 +11,10 @@ public class GmInteger extends GeneMethod{
     }
 
     @Override
+    int getByteArity() { return 4 ; }
+    @Override
     int getArity() {
-        return 4;
+        return 0;
     }
 
     @Override

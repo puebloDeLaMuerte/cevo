@@ -1,6 +1,10 @@
+import java.util.Hashtable;
+
 public class Creature extends MapEntity{
 
 	int id;
+	int timeOfBirth;
+	Hashtable<Integer, Integer> memory;
 
 	private float fitness;
 	float maxFitness;
@@ -10,16 +14,19 @@ public class Creature extends MapEntity{
 	float moveBufferX = 0;
 	float moveBufferY = 0;
 
-	public Creature( Genome genome, GeneReader gr, float fitness ) {
+	public Creature( Genome genome, GeneReader gr, float fitness, int timeOfBirth) {
 		this.genome = genome;
 		this.gr = gr;
 		this.fitness = fitness;
 		this.maxFitness = fitness;
 		this.id = (int)(Math.random()*1000000);
+		this.timeOfBirth = timeOfBirth;
+
+		this.memory = new Hashtable<Integer, Integer>();
 	}
 
 	public void Tick() {
-		fitness -= 0.1f;
+		fitness -= Settings.tickCost;
 		gr.executeGenome(this);
 		checkFitness();
 	}
@@ -58,9 +65,10 @@ public class Creature extends MapEntity{
 		fitness -= cost;
 	}
 
+
 	public void checkFitness() {
 		if( fitness <= 0 ) {
-			System.out.println("creature died: " + id);
+			System.out.println("creature died: " + id + "	after " + (map.time - timeOfBirth) + " ticks" );
 			mapLayer.removeEntity(this);
 		}
 	}
@@ -75,4 +83,20 @@ public class Creature extends MapEntity{
 		return genome;
 	}
 
+	public int getFitness() {
+		return (int)fitness;
+	}
+
+	public int storeAt(int adress, int value) {
+
+		memory.put(adress, value);
+		return adress;
+	}
+
+	public int loadAt(int adress) {
+		if( memory.containsKey(adress) ) {
+			return memory.get(adress);
+		}
+		return 0;
+	}
 }
