@@ -26,11 +26,14 @@ public class Main extends PApplet {
 		for( int i = 0; i < 800; i++) {
 			map.foodLayer.addEntity(new FoodItem((int)(random(1)*256)));
 		}
-
+		// pre-age food items
+		for( int i = 0; i < 800; i++) {
+			map.foodLayer.Tick();
+		}
 
 		// init creatures
-		for( int i = 0; i < 100; i++) {
-			map.creatureLayer.addNewRandomCreature();
+		for( int i = 0; i < 800; i++) {
+			map.creatureLayer.addNewCreature(null,0);
 		}
 	}
 

@@ -183,6 +183,10 @@ public class GeneReader {
 			}
 		}
 
+		if( m == null ) {
+			return null;
+		}
+
 		int arity = m.getArity();
 		int byteArity = m.getByteArity();
 
@@ -214,11 +218,32 @@ public class GeneReader {
 		container.split = container.toByteArray(splitBytes);
 		container.post = container.toByteArray(postBytes);
 
-		container.printCompare();
+		//container.printCompare();
 
 		return container;
 	}
 
+
+	public byte[] crossOverGenes( SplitGenesContainer genes1, SplitGenesContainer genes2 ) {
+
+		byte[] newBytes = new byte[ genes1.pre.length + genes2.split.length + genes1.post.length ];
+
+		// make a new array with genes1.pre + genes2.split + genes1.post
+		int i = 0;
+		for( byte b : genes1.pre ) {
+			newBytes[i] = b;
+			i++;
+		}
+		for( byte b : genes2.split ) {
+			newBytes[i] = b;
+			i++;
+		}
+		for( byte b : genes1.post ) {
+			newBytes[i] = b;
+			i++;
+		}
+		return newBytes;
+	}
 
 
 	public GeneMethod resolveGeneMethod(byte b) {

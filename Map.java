@@ -25,6 +25,7 @@ public class Map {
 		time++;
 		foodLayer.Tick();
 		creatureLayer.Tick();
+		creatureLayer.checkMating();
 	}
 
 	public PGraphics drawMap(PGraphics graphics ) {

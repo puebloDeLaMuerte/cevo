@@ -4,6 +4,11 @@ public class Creature extends MapEntity{
 
 	int id;
 	int timeOfBirth;
+
+	private int nextTimeOfMate;
+	private boolean canMate = false;
+	private int timesMated = 0;
+
 	Hashtable<Integer, Integer> memory;
 
 	private float fitness;
@@ -21,6 +26,7 @@ public class Creature extends MapEntity{
 		this.maxFitness = fitness;
 		this.id = (int)(Math.random()*1000000);
 		this.timeOfBirth = timeOfBirth;
+		this.nextTimeOfMate = timeOfBirth + Settings.creatureMatingAgeThreshold;
 
 		this.memory = new Hashtable<Integer, Integer>();
 	}
@@ -29,6 +35,8 @@ public class Creature extends MapEntity{
 		fitness -= Settings.tickCost;
 		gr.executeGenome(this);
 		checkFitness();
+
+		checkMatingTime();
 	}
 
 	public float moveCreature(float x, float y) {
@@ -73,6 +81,24 @@ public class Creature extends MapEntity{
 		}
 	}
 
+	public void checkMatingTime() {
+
+		if( map.time == nextTimeOfMate ) {
+			canMate = true;
+		}
+	}
+
+	public boolean canMate() {
+		return canMate;
+	}
+
+	public Genome doMate() {
+		canMate = false;
+		timesMated++;
+		nextTimeOfMate = map.time + (Settings.creatureMatingAgeThreshold / timesMated);
+		return genome;
+	}
+
 
 	@Override
 	public float getDrawingValue() {
@@ -85,6 +111,13 @@ public class Creature extends MapEntity{
 
 	public int getFitness() {
 		return (int)fitness;
+	}
+
+	public float getFitnessForMating() {
+
+		float childFitness = fitness * ( 1 - Settings.mateCostFactor);
+		fitness *= Settings.mateCostFactor;
+		return childFitness;
 	}
 
 	public int storeAt(int adress, int value) {
