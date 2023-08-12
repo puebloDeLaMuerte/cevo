@@ -24,7 +24,8 @@ public class GmMove extends GeneMethod{
 		float mx = (float)x / (float)(Integer.MAX_VALUE);
 		float my = (float)y / (float)(Integer.MAX_VALUE);
 
-		float penalty = geneReader.creature.moveCreature(mx, my);
+		float penalty = geneReader.creature.addToMoveBuffer(mx, my);
+		geneReader.creature.spendFitness(penalty);
 		//System.out.println("move: " + mx + ", " + my + " penalty: " + penalty);
 		return (int)penalty;
 	}
