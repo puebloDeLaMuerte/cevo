@@ -35,14 +35,23 @@ public class Creature extends MapEntity{
 		fitness -= Settings.tickCost;
 		gr.executeGenome(this);
 		checkFitness();
-
+		moveCreature();
 		checkMatingTime();
 	}
 
-	public float moveCreature(float x, float y) {
 
+	public float addToMoveBuffer(float x, float y) {
 		moveBufferX += x;
 		moveBufferY += y;
+
+		float cost = x * Settings.movementCost;
+		cost += y * Settings.movementCost;
+		if( cost < 0 ) cost *= -1;
+
+		return cost;
+	}
+
+	public void moveCreature() {
 
 		int mx = 0;
 		int my = 0;
@@ -56,14 +65,15 @@ public class Creature extends MapEntity{
 			moveBufferY -= my;
 		}
 
-		float cost =  mapLayer.moveEntity(this, mx, my);
-		spendFitness(cost);
+		mapLayer.moveEntity(this, mx, my);
 
-		return cost;
+
+		return;
 	}
 
 
 	public float eat() {
+
 		float energy = map.eatAt(positionX,positionY);
 		fitness += energy;
 		return energy - Settings.eatCost;
@@ -76,7 +86,7 @@ public class Creature extends MapEntity{
 
 	public void checkFitness() {
 		if( fitness <= 0 ) {
-			System.out.println("creature died: " + id + "	after " + (map.time - timeOfBirth) + " ticks" );
+			//System.out.println("creature died: " + id + "	after " + (map.time - timeOfBirth) + " ticks" );
 			mapLayer.removeEntity(this);
 		}
 	}
