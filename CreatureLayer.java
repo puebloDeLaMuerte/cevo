@@ -30,7 +30,7 @@ public class CreatureLayer extends MapLayer{
 
 					float dist = map.main.dist(c1.positionX, c1.positionY, c2.positionX, c2.positionY);
 					if( dist < Settings.matingMaxDistance ) {
-						System.out.println("mating!");
+						//System.out.println("mating!");
 
 						SplitGenesContainer genes1 = null;
 						SplitGenesContainer genes2 = null;

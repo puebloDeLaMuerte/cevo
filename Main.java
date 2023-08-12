@@ -23,16 +23,16 @@ public class Main extends PApplet {
 		gr = new GeneReader(this, map);
 
 		// init food items
-		for( int i = 0; i < 800; i++) {
+		for( int i = 0; i < 100; i++) {
 			map.foodLayer.addEntity(new FoodItem((int)(random(1)*256)));
 		}
 		// pre-age food items
-		for( int i = 0; i < 800; i++) {
+		for( int i = 0; i < 2800; i++) {
 			map.foodLayer.Tick();
 		}
 
 		// init creatures
-		for( int i = 0; i < 800; i++) {
+		for( int i = 0; i < 1800; i++) {
 			map.creatureLayer.addNewCreature(null,0);
 		}
 	}
@@ -50,6 +50,13 @@ public class Main extends PApplet {
 		map.drawMap(this.g);
 
 		//gr.printTotalStatistics();
+
+		//pushStyle();
+		//fill(255);
+		//text("creatures: " + map.creatureLayer.entityList.size(), 50, 50);
+		//popStyle();
+
+		surface.setTitle("cevo - " + "creatures: " + map.creatureLayer.entityList.size());
 	}
 
 	public void keyPressed() {

@@ -26,6 +26,9 @@ public class Map {
 		foodLayer.Tick();
 		creatureLayer.Tick();
 		creatureLayer.checkMating();
+		for( int i = 0; i < Settings.foodSpawnsPerTick; i++ ) {
+			foodLayer.addEntity(new FoodItem((int)(main.random(1)*256)));
+		}
 	}
 
 	public PGraphics drawMap(PGraphics graphics ) {
@@ -61,6 +64,8 @@ public class Map {
 	public int getHeight() {
 		return height;
 	}
+
+
 
 	public float eatAt(int posX, int posY) {
 

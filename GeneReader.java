@@ -231,7 +231,7 @@ public class GeneReader {
 		// make a new array with genes1.pre + genes2.split + genes1.post
 		int i = 0;
 		for( byte b : genes1.pre ) {
-			newBytes[i] = b;
+			newBytes[i] = returnOrMutate(b);
 			i++;
 		}
 		for( byte b : genes2.split ) {
@@ -243,6 +243,15 @@ public class GeneReader {
 			i++;
 		}
 		return newBytes;
+	}
+
+	public byte returnOrMutate(byte b) {
+		if( Math.random() < Settings.mutationProbability ) {
+			byte nb = (byte)(Math.random()*256);
+			System.out.println("mutating: " + b + " --> " + nb);
+			return nb;
+		}
+		return b;
 	}
 
 
