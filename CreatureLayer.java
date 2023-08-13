@@ -43,7 +43,12 @@ public class CreatureLayer extends MapLayer{
 
 						byte[] newBytes = map.main.gr.crossOverGenes(genes1, genes2);
 						float newFittness = c1.getFitnessForMating() + c2.getFitnessForMating();
-						addNewCreature(newBytes, newFittness);
+
+						// get half way coordinate between the two creatures
+						int x = (int)((c1.positionX + c2.positionX) / 2);
+						int y = (int)((c1.positionY + c2.positionY) / 2);
+
+						addNewCreature(newBytes, newFittness, x, y);
 					}
 				}
 			}
@@ -51,7 +56,17 @@ public class CreatureLayer extends MapLayer{
 	}
 
 
+	public void addNewCreature(byte[] newGenes, float initialFitness, int x, int y ) {
+		Creature c = makeCreature(newGenes, initialFitness);
+		addEntity(c, x, y);
+	}
+
 	public void addNewCreature(byte[] newGenes, float initialFitness ) {
+		Creature c = makeCreature(newGenes, initialFitness);
+		addEntity(c);
+	}
+
+	public Creature makeCreature(byte[] newGenes, float initialFitness ) {
 
 		byte[] bytes;
 
@@ -71,8 +86,7 @@ public class CreatureLayer extends MapLayer{
 		}
 
 
-		Creature c = new Creature(g, map.main.gr, initialFitness, map.getTime() );
-		addEntity(c);
+		return new Creature(g, map.main.gr, initialFitness, map.getTime() );
 	}
 
 

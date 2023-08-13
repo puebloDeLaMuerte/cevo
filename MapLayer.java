@@ -27,6 +27,8 @@ public class MapLayer {
 		}
 	}
 
+
+
 	public void addEntity( MapEntity entity ) {
 		// add entity to a random location
 		int x = (int) (random() * map.getWidth());

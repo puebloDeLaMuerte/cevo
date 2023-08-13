@@ -6,14 +6,16 @@ public class GeneReader {
 
 	Main main;
 	Map map;
+	Statistics stats;
 	Creature creature;
 	int depth = 0;
 	int maxDepth = 0;
 	int totalSkips = 0;
 
-	public GeneReader(Main m, Map map) {
+	public GeneReader(Main m, Map map, Statistics stats) {
 		this.map = map;
 		this.main = m;
+		this.stats = stats;
 	}
 
 	ArrayList<String> callstack = new ArrayList<String>();
@@ -24,6 +26,7 @@ public class GeneReader {
 		new GmAdd(),
 		new GmSubtract(),
 		new GmInteger(),
+		new GmSmallInteger(),
 		new GmIfElse(),
 		new GmMove(),
 		new GmDivide(),
@@ -49,9 +52,10 @@ public class GeneReader {
 
 
 	public void executeGenome(Creature creature) {
+
 		this.creature = creature;
 		reset();
-
+		stats.countCreature();
 
 		// take a timestamp in milliseconds
 		long startTime = System.currentTimeMillis();
@@ -82,6 +86,11 @@ public class GeneReader {
 				gm.printExecutionStats();
 			}
 		}
+
+		stats.countDepth(maxDepth);
+		stats.coutSkippedGenes(totalSkips);
+
+		creature.spendFitness( maxDepth * Settings.depthPenaltyFactor );
 
 		this.depth = 0;
 		this.maxDepth = 0;
@@ -138,6 +147,8 @@ public class GeneReader {
 
 		int r = gm.execute(this);
 		gm.incrementCount();
+		stats.countMethod(gm);
+
 		if(verbose > 10) System.out.print(") ");
 		if(verbose > 10) System.out.print(" --> " + r );
 		if(verbose > 10) System.out.print(" (skips: " + skips + ")");

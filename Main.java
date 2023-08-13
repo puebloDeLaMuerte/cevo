@@ -14,26 +14,30 @@ public class Main extends PApplet {
 
 	Map map;
 	GeneReader gr;
+	Statistics stats;
+
+	int creaturesSpawned = 0;
 
 	public void settings() {
 
-		size(1000, 1000);
+		size(1300, 1000);
 
-		map = new Map( this, 400,400 );
-		gr = new GeneReader(this, map);
+		map = new Map( this, 650,500 );
+		stats = new Statistics();
+		gr = new GeneReader(this, map, stats);
 
 		// init food items
-		for( int i = 0; i < 100; i++) {
+		for( int i = 0; i < 25; i++) {
 			map.foodLayer.addEntity(new FoodItem((int)(random(1)*256)));
 		}
 		// pre-age food items
-		for( int i = 0; i < 2800; i++) {
+		for( int i = 0; i < 14800; i++) {
 			map.foodLayer.Tick();
 		}
 
 		// init creatures
 		for( int i = 0; i < 1800; i++) {
-			map.creatureLayer.addNewCreature(null,0);
+
 		}
 	}
 
@@ -46,9 +50,13 @@ public class Main extends PApplet {
 
 	public void draw() {
 
+		stats.reset();
+
 		map.Tick();
 		map.drawMap(this.g);
 
+
+		stats.printTotalAverages();
 		//gr.printTotalStatistics();
 
 		//pushStyle();
@@ -57,12 +65,16 @@ public class Main extends PApplet {
 		//popStyle();
 
 		surface.setTitle("cevo - " + "creatures: " + map.creatureLayer.entityList.size());
+
+		if( creaturesSpawned < Settings.initialCreatureCount ) {
+			map.creatureLayer.addNewCreature(null,0);
+			creaturesSpawned++;
+		}
 	}
 
 	public void keyPressed() {
 		if( key == 'c' ) {
-			Creature c = (Creature)map.creatureLayer.entityList.get(0);
-			gr.getRandomSubString(c.genome);
+			map.creatureLayer.addNewCreature(null,0);
 		}
 	}
 }

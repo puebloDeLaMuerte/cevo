@@ -27,7 +27,6 @@ public class GmEat extends GeneMethod
 		float penalty = geneReader.creature.eat();
 
 		totalEatPenalty += penalty;
-
 		return (int)penalty;
 	}
 }
